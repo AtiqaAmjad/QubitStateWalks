@@ -1,0 +1,447 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[12]:
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 40      # number of random steps
+P = 2 * N + 1    # number of positions
+
+coin0 = np.array([1, 0])  # |0>
+coin1 = np.array([0, 1])  # |1>
+
+Coin00 = np.outer(coin0, coin0)  # |0><0| 
+Coin01 = np.outer(coin0, coin1)  # |0><1| 
+Coin10 = np.outer(coin1, coin0)  # |1><0| 
+Coin11 = np.outer(coin1, coin1)
+
+ket01 = np.kron(coin0, coin1)
+
+C_hat = np.array([[0.5, 0.5],
+                  [0.5, -0.5]])
+
+ShiftPlus = np.roll(np.eye(P), 1, axis=0)
+
+Shift10 = np.roll(np.eye(P), 0, axis=0)
+
+S_hat = np.kron(ShiftPlus, Coin00) + np.kron(ShiftMinus, Coin11)
+
+U = S_hat.dot(np.kron(np.eye(P), C_hat))
+
+posn0 = np.zeros(P)
+posn0[N] = 1     # array indexing starts from 0, so index N is the central posn
+
+# Initialize the state as a superposition of posn0|coin0⟩ and posn0|coin1⟩
+coin_superposition = (coin0+coin1*1j) / np.sqrt(2.)
+psi0 = np.kron(posn0, coin_superposition)
+
+
+prob = np.empty(P)
+
+for k in range(P):
+    posn = np.zeros(P)
+    posn[k] = 1     
+    M_hat_k = np.kron(np.outer(posn, posn), np.eye(2))
+    proj = M_hat_k.dot(psiN)
+    prob[k] = proj.dot(proj.conjugate()).real
+
+# Normalize the probabilities
+prob /= np.sum(prob)
+
+fig = plt.figure()
+
+x_axis = [-N + i for i in range(P)]
+
+plt.plot(x_axis, prob, color='purple')  # Set the color to green
+plt.plot(x_axis, prob, '.', color='purple')  # Set the color to green
+
+# Add axis labels
+plt.xlabel('Number of Steps')
+plt.ylabel('Probability')
+plt.title(' Superposition State ')
+
+plt.show()
+
+
+# In[19]:
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 100      # number of random steps
+P = 2 * N + 1    # number of positions
+
+coin0 = np.array([1, 0])  # |0>
+coin1 = np.array([0, 1])  # |1>
+
+Coin00 = np.outer(coin0, coin0)  # |0><0| 
+Coin01 = np.outer(coin0, coin1)  # |0><1| 
+Coin10 = np.outer(coin1, coin0)  # |1><0| 
+Coin11 = np.outer(coin1, coin1)
+
+ket01 = np.kron(coin0, coin1)
+
+C_hat = np.array([[-0.5, 0.5],
+                  [-0.5, -0.5]])
+
+S_hat = np.kron(ShiftPlus, Coin00) + np.kron(ShiftMinus, Coin11)
+
+posn0 = np.zeros(P)
+posn0[N] = 1     # array indexing starts from 0, so index N is the central posn
+
+# Initialize the state as a superposition of posn0|coin0⟩ and posn0|coin1⟩
+coin_superposition = (coin0+coinj) / np.sqrt(2.)
+psi0 = np.kron(posn0, coin_superposition)
+
+
+
+prob = np.empty(P)
+
+for k in range(P):
+    posn = np.zeros(P)
+    posn[k] = 1     
+    M_hat_k = np.kron(np.outer(posn, posn), np.eye(2))
+    proj = M_hat_k.dot(psiN)
+    prob[k] = proj.dot(proj.conjugate()).real
+
+# Normalize the probabilities
+prob /= np.sum(prob)
+
+fig = plt.figure()
+
+x_axis = [-N + i for i in range(P)]
+
+plt.plot(x_axis, prob, color='purple')  # Set the color to green
+plt.plot(x_axis, prob, '.', color='purple')  # Set the color to green
+
+# Add axis labels
+plt.xlabel('Number of Steps')
+plt.ylabel('Probability')
+plt.title(' Superposition State ')
+plt.show()
+
+
+# In[20]:
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 100      # number of random steps
+P = 2*N+1    # number of positions
+
+coin0 = np.array([1, 0])  # |0>
+coin1 = np.array([0, 1])  # |1>
+
+C00 = np.outer(coin0, coin0)  # |0><0| 
+C01 = np.outer(coin0, coin1)  # |0><1| 
+C10 = np.outer(coin1, coin0)  # |1><0| 
+C11 = np.outer(coin1, coin1)
+
+coin_00 = np.outer(np.kron(coin0, coin0), np.kron(coin0, coin0))  # |00><00|
+coin_01 = np.outer(np.kron(coin0, coin1), np.kron(coin0, coin1))  # |01><01|
+coin_10 = np.outer(np.kron(coin1, coin0), np.kron(coin1, coin0))
+coin_11 = np.outer(np.kron(coin1, coin1), np.kron(coin1, coin1))  # |11><11|
+
+ket00 = np.kron(coin0, coin0)
+ket11 = np.kron(coin1, coin1)
+ket01 = np.kron(coin0, coin1)
+ket10 = np.kron(coin1, coin0)
+
+C_hat = np.array([[0.5, 0.5, 0.5, 0.5],
+                  [0.5, -0.5, 0.5, -0.5],
+                  [0.5, 0.5, -0.5, -0.5],
+                  [0.5, -0.5, -0.5, 0.5]])
+
+ShiftPlus = np.roll(np.eye(P), 1, axis=0)
+
+S_hat = np.kron(ShiftPlus, coin_00) + np.kron(ShiftMinus, coin_11) + np.kron(Shift01, coin_01) + np.kron(Shift10, coin_10)
+
+posn0 = np.zeros(P)
+posn0[N] = 1     # array indexing starts from 0, so index N is the central posn
+psi0 = np.kron(posn0, np.kron(coin0 + coin1, coin0 + coin1) / 2)
+
+prob = np.empty(P)
+
+for k in range(P):
+    posn = np.zeros(P)
+    posn[k] = 1
+    M_hat_k = np.kron(np.outer(posn, posn), np.eye(4))
+    proj = M_hat_k.dot(psiN)
+    prob[k] = proj.dot(proj.conjugate()).real
+
+
+fig = plt.figure()
+
+x_axis = [-N+i for i in range(P)]
+
+plt.plot(x_axis, prob, color='blue')
+plt.plot(x_axis, prob, '.', color='black')
+
+plt.xlabel('no of steps (m = 100)')
+plt.ylabel('Probability ')
+plt.title(' Separable State ')
+
+plt.show()
+
+
+# In[21]:
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 150      # number of random steps
+P = 2*N+1    # number of positions
+
+coin0 = np.array([1, 0])  # |0>
+coin1 = np.array([0, 1])  # |1>
+
+C00 = np.outer(coin0, coin0)  # |0><0| 
+C01 = np.outer(coin0, coin1)  # |0><1| 
+C10 = np.outer(coin1, coin0)  # |1><0| 
+C11 = np.outer(coin1, coin1)
+
+coin_00 = np.outer(np.kron(coin0, coin0), np.kron(coin0, coin0))  # |00><00|
+coin_01 = np.outer(np.kron(coin0, coin1), np.kron(coin0, coin1))  # |01><01|
+coin_10 = np.outer(np.kron(coin1, coin0), np.kron(coin1, coin0))
+coin_11 = np.outer(np.kron(coin1, coin1), np.kron(coin1, coin1))  # |11><11|
+
+ket00 = np.kron(coin0, coin0)
+ket11 = np.kron(coin1, coin1)
+
+ket10 = np.kron(coin1, coin0)
+
+C_hat = np.array([[0.5, 0.5, 0.5, 0.5],
+                  [0.5, -0.5, -0.5, -0.5],
+                  [0.5, -0.5, -0.5, -0.5],
+                  [-0.5, -0.5, -0.5, 0.5]])
+
+ShiftPlus = np.roll(np.eye(P), 1, axis=0)
+
+S_hat = np.kron(ShiftPlus, coin_00) + np.kron(ShiftMinus, coin_11) + np.kron(Shift01, coin_01) + np.kron(Shift10, coin_10)
+
+U = S_hat.dot(np.kron(np.eye(P), C_hat))
+
+posn0 = np.zeros(P)
+posn0[N] = 1     # array indexing starts from 0, so index N is the central posn
+psi0 = np.kron(posn0, np.kron(coin0 + coin1, coin0 + coin1) / 2)
+
+
+prob = np.empty(P)
+
+for k in range(P):
+    posn = np.zeros(P)
+    posn[k] = 1
+    M_hat_k = np.kron(np.outer(posn, posn), np.eye(4))
+    proj = M_hat_k.dot(psiN)
+    prob[k] = proj.dot(proj.conjugate()).real
+
+
+fig = plt.figure()
+
+x_axis = [-N+i for i in range(P)]
+
+plt.plot(x_axis, prob, color='blue')
+plt.plot(x_axis, prob, '.', color='black')
+
+plt.xlabel('No of steps (m = 150)')
+plt.ylabel('Probability ')
+plt.title('Second Separable State ')
+
+plt.show()
+
+
+# In[22]:
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 100      # number of random steps
+P = 2*N+1    # number of positions
+
+coin0 = np.array([1, 0])  # |0>
+coin1 = np.array([0, 1])  # |1>
+
+C00 = np.outer(coin0, coin0)  # |0><0| 
+C01 
+C10 = np.outer(coin1, coin0)  # |1><= np.outer(coin0, coin1)  # |0><1| 0| 
+C11 = np.outer(coin1, coin1)
+
+coin_00 = np.outer(np.kron(coin0, coin0), np.kron(coin0, coin0))  # |00><00|
+coin_01 = np.outer(np.kron(coin0, coin1), np.kron(coin0, coin1))  # |01><01|
+coin_10 = np.outer(np.kron(coin1, coin0), np.kron(coin1, coin0))
+coin_11 = np.outer(np.kron(coin1, coin1), np.kron(coin1, coin1))  # |11><11|
+
+ket00 = np.kron(coin0, coin0)
+ket11 = np.kron(coin1, coin1)
+ket01 = np.kron(coin0, coin1)
+ket10 = np.kron(coin1, coin0)
+
+C_hat = np.array([[0.5, 0.5, -0.5, 0.5],
+                  [0.5, -0.5, 0.5, -0.5],
+                  [-0.5, -0.5, -0.5, -0.5],
+                  [0.5, -0.5, -0.5, 0.5]])
+
+ShiftPlus = np.roll(np.eye(P), 1, axis=0)
+Shift10 = np.roll(np.eye(P), 0, axis=0)
+S_hat = np.kron(ShiftPlus, coin_00) + np.kron(ShiftMinus, coin_11) + np.kron(Shift01, coin_01) + np.kron(Shift10, coin_10)
+
+U = S_hat.dot(np.kron(np.eye(P), C_hat))
+
+posn0 = np.zeros(P)
+posn0[N] = 1     # array indexing starts from 0, so index N is the central posn
+psi0 = np.kron(posn0, (np.sqrt(2/5) * ket00 + np.sqrt(1/5) * ket01 + np.sqrt(1/10) * ket10 + np.sqrt(3/10) * ket11))
+
+prob = np.empty(P)
+
+for k in range(P):
+    posn = np.zeros(P)
+    posn[k] = 1
+    M_hat_k = np.kron(np.outer(posn, posn), np.eye(4))
+    proj = M_hat_k.dot(psiN)
+    prob[k] = proj.dot(proj.conjugate()).real
+    
+fig = plt.figure()
+
+x_axis = [-N+i for i in range(P)]
+
+plt.plot(x_axis, prob, color='red')
+plt.plot(x_axis, prob, '.', color='black')
+plt.xlabel('Steps of the Particle')
+plt.ylabel('Probability')
+# Add title at the top
+plt.title('Partially Entangled State ', pad=20, loc='center', fontsize=10)
+plt.show()
+
+
+# In[23]:
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 100      # number of random steps
+P = 2*N+1    # number of positions
+
+coin0 = np.array([1, 0])  # |0>
+coin1 = np.array([0, 1])  # |1>
+
+coin_00 = np.outer(np.kron(coin0, coin0), np.kron(coin0, coin0))  # |00><00|
+coin_01 = np.outer(np.kron(coin0, coin1), np.kron(coin0, coin1))  # |01><01|
+coin_10 = np.outer(np.kron(coin1, coin0), np.kron(coin1, coin0))  # |10><10|
+coin_11 = np.outer(np.kron(coin1, coin1), np.kron(coin1, coin1))  # |11><11|
+
+ket01 = np.kron(coin0, coin1)
+ket10 = np.kron(coin1, coin0)
+
+C_hat = np.array([[0.5, 0.5, -0.5, 0.5],
+                  [-0.5, -0.5, 0.5, -0.5],
+                  [0.5, -0.5, -0.5, -0.5],
+                  [0.5, -0.5, -0.5, 0.5]])
+
+ShiftPlus = np.roll(np.eye(P), 1, axis=0)
+ShiftMinus = np.roll(np.eye(P), -1, axis=0)
+Shift01 = np.roll(np.eye(P), 0, axis=0)
+Shift10 = np.roll(np.eye(P), 0, axis=0)
+S_hat = np.kron(ShiftPlus, coin_01) + np.kron(ShiftMinus, coin_10) + np.kron(Shift01, coin_00) + np.kron(Shift10, coin_11)
+
+U = S_hat.dot(np.kron(np.eye(P), C_hat))
+
+posn0 = np.zeros(P)
+posn0[N] = 1     # array indexing starts from 0, so index N is the central posn
+psi0 = np.kron(posn0, (ket-01 + ket10) / np.sqrt(2.))
+
+prob = np.empty(P)
+
+for k in range(P):
+    posn = np.zeros(P)
+    posn[k] = 1     
+    M_hat_k = np.kron(np.outer(posn, posn), np.eye(4))
+    proj = M_hat_k.dot(psiN)
+    prob[k] = proj.dot(proj.conjugate()).real
+   
+    
+fig = plt.figure()
+
+x_axis = [-N+i for i in range(P)]
+
+plt.plot(x_axis, prob, color='green')
+plt.plot(x_axis, prob, '.', color='black')
+
+plt.xlabel('Steps of Particle (m = 100)')
+plt.ylabel('Probability')
+
+
+plt.show()
+
+
+# In[24]:
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+N = 100      # number of random steps
+P = 2*N+1    # number of positions
+
+coin0 = np.array([1, 0])  # |0>
+coin1 = np.array([0, 1])  # |1>
+
+coin_00 = np.outer(np.kron(coin0, coin0), np.kron(coin0, coin0))  # |00><00|
+coin_01 = np.outer(np.kron(coin0, coin1), np.kron(coin0, coin1))  # |01><01|
+coin_10 = np.outer(np.kron(coin1, coin0), np.kron(coin1, coin0))  # |10><10|
+coin_11 = np.outer(np.kron(coin1, coin1), np.kron(coin1, coin1))  # |11><11|
+
+ket01 = np.kron(coin0, coin1)
+ket10 = np.kron(coin1, coin0)
+
+C_hat = np.array([[0.5, 0.5, 0-.5, 0.5],
+                  [0.5, -0.5, -0.5, -0.5],
+                  [-0.5, 0.5, -0.5, -0.5],
+                  [0.5, -0.5, -0.5, 0.5]])
+
+ShiftPlus = np.roll(np.eye(P), 1, axis=0)
+Shift10 = np.roll(np.eye(P), 0, axis=0)
+S_hat = np.kron(ShiftPlus, coin_01) + np.kron(ShiftMinus, coin_10) + np.kron(Shift01, coin_00) + np.kron(Shift10, coin_11)
+
+U = S_hat.dot(np.kron(np.eye(P), C_hat))
+
+posn0 = np.zeros(P)
+posn0[N] = 1     # array indexing starts from 0, so index N is the central posn
+psi0 = np.kron(posn0, (ket01 - ket10) / np.sqrt(2.))
+
+prob = np.empty(P)
+
+for k in range(P):
+    posn = np.zeros(P)
+    posn[k] = 1     
+    M_hat_k = np.kron(np.outer(posn, posn), np.eye(4))
+    proj = M_hat_k.dot(psiN)
+    prob[k] = proj.dot(proj.conjugate()).real
+   
+    
+fig = plt.figure()
+
+x_axis = [-N+i for i in range(P)]
+
+plt.plot(x_axis, prob, color='green')
+plt.plot(x_axis, prob, '.', color='black')
+
+plt.xlabel('Steps of Particle (m = 100)')
+plt.ylabel('Probability')
+plt.title('Maximally Entangled State')
+
+plt.show()
+
+
+# In[ ]:
+
+
+
+
